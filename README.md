@@ -76,3 +76,25 @@ echo access_key | base64
 
 
 ```
+
+Version 1.0.0
+
+Interate such feature:
+
+- Minio
+- Express
+- Shell js
+
+
+How to run this project:
+Prerequisites: docker composer and docker
+
+```
+docker pull minio/minio
+docker built -t std-io:1.0.1 . // do this in this project root directory
+docker-compose up
+```
+
+go browser and hit the seperate endpoint:
+http://localhost:9001 to see the minio
+http://localhost:3000/min to upload readme into minio
