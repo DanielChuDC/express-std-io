@@ -73,9 +73,13 @@ echo secret_key | base64
 => c2VjcmV0X2tleQo=
 echo access_key | base64
 => YWNjZXNzX2tleQo=
-
-
 ```
+
+### How to upload file into minio
+[minio-js](https://github.com/minio/minio-js) have full documentation.
+
+Please go to [example of minio](./example-minio.md) to view the example.
+
 
 Version 1.0.0
 
@@ -86,7 +90,7 @@ Interate such feature:
 - Shell js
 
 
-How to run this project:
+### How to run this project:
 Prerequisites: docker composer and docker
 
 ```
@@ -95,6 +99,10 @@ docker built -t std-io:1.0.1 . // do this in this project root directory
 docker-compose up
 ```
 
-go browser and hit the seperate endpoint:
+### Go browser and hit the seperate endpoint:
 http://localhost:9001 to see the minio
 http://localhost:3000/min to upload readme into minio
+
+## Version 1.0.1
+
+

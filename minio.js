@@ -27,7 +27,7 @@ const minioFunction = () => {
         example: 5678
       };
       // Using fPutObject API upload your file to the bucket europetrip.
-      minioClient.fPutObject('europetrip', 'Readme', file, metaData, function(err, etag) {
+      minioClient.fPutObject('individualuser', 'Readme', file, metaData, function(err, etag) {
         if (err) return console.log(err);
         console.log('File uploaded successfully.');
       });
