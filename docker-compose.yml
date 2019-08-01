@@ -1,0 +1,21 @@
+version: '2'
+services:
+  myminio:
+    container_name: myminio
+    image: minio/minio
+    environment:
+      - MINIO_ACCESS_KEY=access_key
+      - MINIO_SECRET_KEY=secret_key
+    ports:
+      - '9001:9000'
+    command: server /data
+
+  express-app:
+    container_name: express-app
+    restart: always
+    image: std-io:1.0.1
+    ports:
+      - '3000:3000'
+    links:
+      - myminio
+      #https://medium.com/statuscode/dockerising-a-node-js-and-mongodb-app-d22047e2806f
