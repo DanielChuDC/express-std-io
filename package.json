@@ -24,6 +24,7 @@
   "homepage": "https://github.com/DanielChuDC/express-std-io#readme",
   "dependencies": {
     "agenda": "^2.0.2",
+    "bull": "^3.10.0",
     "debug": "^4.1.1",
     "express": "^4.17.1",
     "minio": "^7.0.10",

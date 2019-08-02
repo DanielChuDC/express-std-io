@@ -4,15 +4,16 @@ This project demonstrate how express can pass bash script and return output
 
 ## Preparation
 
-```bash
+```node
 npm i express morgan debug multer serve-index --save// added debug ability
 npm install body-parser --save //for rest api call
 npm install --save-dev nodemon //for auto detect code change
 npm install --save-dev supports-color //for color the std output
 npm install shelljs --save //for wrapping bash script
 npm install --save-dev dotenv //for fetching environment var
-npm install mongodb --save //for mongodb client
-npm install minio --save //for minio client
+npm install mongodb --save // for mongodb client
+npm install minio --save // for minio client
+npm install redis --save // for redis client
 
 npm install agenda --save//for node light weight job scheduler
 
@@ -35,9 +36,10 @@ See more for
 - [support-color](https://www.npmjs.com/package/supports-color)
 - [shelljs](https://www.npmjs.com/package/shelljs)
 - [mongodb](https://www.npmjs.com/package/minio)
-- [minio](https://www.npmjs.com/package/mongodb) OR [minio](https://github.com/minio/minio-js)
+- [minio npm](https://www.npmjs.com/package/mongodb) OR [minio github](https://github.com/minio/minio-js)
+- [redis npm](https://www.npmjs.com/package/redis) OR [redis github](https://github.com/antirez/redis)
 
-* [agenda](https://www.npmjs.com/package/agenda) OR [agenda github](https://github.com/agenda/agenda#agenda-events)
+* [bull npm](https://www.npmjs.com/package/bull) OR [agenda github](https://github.com/OptimalBits/bull)
 
 ### Add line
 
@@ -62,8 +64,11 @@ Run the following command:
 ```bash
 docker pull mongo
 docker pull minio/minio
+docker pull redis
 docker run -p 27017:27017 mongo
 docker run -d -p 9000:9000 -e MINIO_ACCESS_KEY='access_key' -e MINIO_SECRET_KEY='secret_key' minio/minio server /data
+# rdis use port 6379
+docker run --name my-redis -d -p 6379:6379 redis
 ```
 
 ### To generate base64 encode sceret
@@ -108,3 +113,45 @@ http://localhost:3000/min to upload readme into minio
 
 - Added Terraform
 - Added IBM cloud provider terraform plugin
+- Added redis
+- Added bull job scheduler
+
+### How to connect redis?
+
+- Using [medis](http://getmedis.com/)
+- Download [medis](https://github.com/luin/medis) from github and run in localhost for dev purpose
+
+### Bull Job Scheduler concept
+
+<img src="img/job-lifecycle.png">
+
+##### Separate processes
+
+The process function can also be run in a separate process. This has several advantages:
+
+    The process is sandboxed so if it crashes it does not affect the worker.
+    You can run blocking code without affecting the queue (jobs will not stall).
+    Much better utilization of multi-core CPUs.
+    Less connections to redis.
+
+In order to use this feature just create a separate file with the processor:
+
+```js
+// processor.js
+module.exports = function(job){
+  // Do some heavy work
+
+  return Promise.resolve(result);
+}
+
+And define the processor like this:
+
+// Single process:
+queue.process('/path/to/my/processor.js');
+
+// You can use concurrency as well:
+queue.process(5, '/path/to/my/processor.js');
+
+// and named processors:
+queue.process('my processor', 5, '/path/to/my/processor.js');
+```
