@@ -3,8 +3,12 @@ const app = express();
 const debug = require('debug')('myapp:server');
 const port = process.env.PORT || 3000;
 const bodyParser = require('body-parser');
+// Import the minio from minio.js
 const { minioFunction } = require('./minio');
-const Minio = require('minio');
+
+//Using File system to get the file content
+// const fs = require('fs');
+
 // Get information about host's operating system
 var os = require('os');
 
@@ -50,6 +54,52 @@ app.get('/app', function(req, res) {
   }
 });
 
+app.get('/tera', function(req, res) {
+  if (shell.which('terraform')) {
+    //shell.exec('terraform --version');
+    return res.send(shell.exec('terraform --version'));
+  } else {
+    return res.send(console.log('you do not have terraform installed.'));
+    console.log('you do not have terraform installed.');
+  }
+});
+
+app.get('/git', function(req, res) {
+  if (shell.which('git')) {
+    //shell.exec('terraform --version');
+    return res.send(shell.exec('git --version'));
+  } else {
+    return res.send(console.log('you do not have git installed.'));
+    console.log('you do not have terraform installed.');
+  }
+});
+
+app.get('/min', function(req, res) {
+  console.log(minioFunction);
+  res.send(minioFunction());
+});
+
+app.get('/terraibm', function(req, res) {
+  // fs.readFile('~/.terraformrc', 'UTF8', function(err, contents) {
+  //   console.log(contents);
+  //   return res.send(contents);
+  // });
+  if (shell.find('~/.terraformrc')) {
+    //shell.exec('terraform --version');
+    return res.send(shell.exec('cat ~/.terraformrc'));
+  } else {
+    return res.send(console.log('you do not have terraform ibm plugin installed.'));
+    console.log('you do not have terraform installed.');
+  }
+});
+
+// name as api to create terraform flow
+// terraform init -upgrade
+// terraform plan
+// terraform apply
+// terraform state
+// terraform destroy
+
 app.get('/api', function(req, res) {
   //console.log(req);
   if (!req.body.title || !req.body.command) {
@@ -77,17 +127,56 @@ app.get('/api', function(req, res) {
   // return res.status(200).send('nothing is impossible');
 });
 
-app.get('/tera', function(req, res) {
-  if (shell.which('git')) {
-    // shell.exec('terraform --version');
-    return res.send(shell.exec('terraform init'));
+app.get('/api/create', function(req, res) {
+  //console.log(req);
+  if (!req.body.command) {
+    return res.status(400).send({
+      success: 'false',
+      message: 'command is required'
+    });
   } else {
-    return res.send(console.log('you do not have terraform installed.'));
-    console.log('you do not have terraform installed.');
+    // create template
+    // shell.exec('cd ~/');
+    // shell.exec('touch ~/template.tf');
+    shell.exec('pwd');
+    // shell.exec('ls ~');
+    // shell.exec('ls /home/node/app');
+    shell.exec('ls /tmp');
+
+    shell.exec('cd /tmp; terraform init -upgrade;', function(code, stdout, stderr) {
+      console.log('Exit code:', code);
+      // console.log('Program output:', stdout);
+      console.log('Program stderr:', stderr);
+      if (code != 0) {
+        return res.send('terraform init -upgrade unsuccess');
+      } else if (code == 0) {
+        return res.send('terraform init -upgrade success');
+      }
+    });
   }
 });
 
-app.get('/min', function(req, res) {
-  console.log(minioFunction);
-  res.send(minioFunction());
+app.get('/api/plan', function(req, res) {
+  //console.log(req);
+  if (!req.body.command) {
+    return res.status(400).send({
+      success: 'false',
+      message: 'command is required'
+    });
+  } else {
+    // create template
+    // shell.exec('cd ~/');
+    // shell.exec('touch ~/template.tf');
+
+    shell.exec('cd /tmp; terraform plan;', function(code, stdout, stderr) {
+      console.log('Exit code:', code);
+      // console.log('Program output:', stdout);
+      console.log('Program stderr:', stderr);
+      if (code != 0) {
+        return res.send('terraform init -upgrade unsuccess');
+      } else if (code == 0) {
+        return res.send(stdout);
+      }
+    });
+  }
 });

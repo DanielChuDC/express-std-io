@@ -1,3 +1,6 @@
 .vscode
 node_modules
 .env
+script
+terraform.tf
+terraform.tfvars

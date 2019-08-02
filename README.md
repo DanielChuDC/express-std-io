@@ -76,10 +76,10 @@ echo access_key | base64
 ```
 
 ### How to upload file into minio
+
 [minio-js](https://github.com/minio/minio-js) have full documentation.
 
 Please go to [example of minio](./example-minio.md) to view the example.
-
 
 Version 1.0.0
 
@@ -89,8 +89,8 @@ Interate such feature:
 - Express
 - Shell js
 
-
 ### How to run this project:
+
 Prerequisites: docker composer and docker
 
 ```
@@ -100,9 +100,11 @@ docker-compose up
 ```
 
 ### Go browser and hit the seperate endpoint:
+
 http://localhost:9001 to see the minio
 http://localhost:3000/min to upload readme into minio
 
 ## Version 1.0.1
 
-
+- Added Terraform
+- Added IBM cloud provider terraform plugin
