@@ -1,6 +1,6 @@
+// import minio
+const Minio = require('minio');
 const minioFunction = () => {
-  // import minio
-  const Minio = require('minio');
   try {
     // Instantiate the minio client with the endpoint
     // and access keys as shown below.
@@ -37,4 +37,16 @@ const minioFunction = () => {
   }
 };
 
-module.exports = { minioFunction };
+const min = (
+  minEndPoint,
+  minPort,
+  minSslCon,
+  minAccessKey,
+  minSecretKey,
+  minBucketName,
+  minObjName
+) => {
+  console.log('initialze a minio connection');
+};
+
+module.exports = { minioFunction, min };

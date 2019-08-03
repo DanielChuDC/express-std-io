@@ -86,7 +86,7 @@ echo access_key | base64
 
 Please go to [example of minio](./example-minio.md) to view the example.
 
-Version 1.0.0
+## Version 1.0.0
 
 Interate such feature:
 
