@@ -12,6 +12,9 @@ Remote state is a feature of backends. Configuring and using remote backends is 
 
 ### How to achieve store remote file into minio
 
+[Official terraform backend storage support S3 page](https://www.terraform.io/docs/backends/types/s3.html)
+
+[Solution of other S3 storage from github issue](https://github.com/hashicorp/terraform/pull/15553#issuecomment-334724247)
 https://github.com/hashicorp/terraform/pull/14096
 
 @radeksimko would be sweet to have this merged.
@@ -44,3 +47,25 @@ resource "local_file" "foo" {
     filename = "${path.module}/foo.bar"
 }
 ```
+
+@lfarnell I have used IBM Cloud Object Storage https://www.ibm.com/cloud-computing/bluemix/cloud-object-storage, it works well with the following configuration:
+
+```terraform
+terraform {
+  backend "s3" {
+    endpoint = "http://s3.eu-geo.objectstorage.softlayer.net"
+    region = "us-west-1" # Basically this gets ignored.
+    profile = "cos-profile"
+    bucket = "remote-state"
+    key = "terraform"
+    skip_requesting_account_id = true
+    skip_credentials_validation = true
+    skip_get_ec2_platforms = true
+    skip_metadata_api_check = true
+  }
+}
+```
+
+This works because the endpoint decides which region are you using.
+
+To be honest I haven't tried with anything else.
