@@ -12,10 +12,10 @@ WORKDIR /tmp
 ## temp solution
 ## move the terraform template to ~ directory for testing purpose
 
-COPY terraform.tf /tmp/terraform.tf
-COPY terraform.tfvars /tmp/terraform.tfvars
-COPY variable.tf /tmp/variable.tf
-COPY output.tf /tmp/output.tf
+COPY script/terraform.tf /tmp/terraform.tf
+COPY script/terraform.tfvars /tmp/terraform.tfvars
+COPY script/variable.tf /tmp/variable.tf
+COPY script/output.tf /tmp/output.tf
 
 
 WORKDIR /home/node/app

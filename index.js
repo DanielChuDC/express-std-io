@@ -6,27 +6,12 @@ const bodyParser = require('body-parser');
 // Import the minio from minio.js
 const { minioFunction } = require('./minio');
 
-//Using File system to get the file content
-// const fs = require('fs');
+// import bull
+var bullinit = require('./bull');
 
 // Get information about host's operating system
 var os = require('os');
 
-// // import agenda
-// const Agenda = require('agenda');
-// // create connection string for mongo
-// const mongoConnectionString = 'mongodb://localhost:27017/data';
-
-// // or override the default collection name:
-// let agenda = new Agenda({
-//   db: {
-//     address: mongoConnectionString,
-//     collection: 'jobs',
-//     options: { ssl: false },
-//     sort: { nextRunAt: 1 }
-//   }
-// });
-// agenda.name(os.hostname + '-' + process.pid);
 
 // import shelljs
 let shell = require('shelljs');
@@ -42,6 +27,12 @@ app.listen(port, () => {
 
 app.get('/', function(req, res) {
   return res.send('hello from my app express server!');
+});
+
+app.get('/bull', function(req, res) {
+  bullinit();
+  //console.log(bullinit());
+  return res.send('bull is working');
 });
 
 app.get('/app', function(req, res) {
@@ -69,7 +60,7 @@ app.get('/git', function(req, res) {
     //shell.exec('terraform --version');
     return res.send(shell.exec('git --version'));
   } else {
-    return res.send(console.log('you do not have git installed.'));
+    return res.send('you do not have git installed.');
     console.log('you do not have terraform installed.');
   }
 });
@@ -173,7 +164,68 @@ app.get('/api/plan', function(req, res) {
       // console.log('Program output:', stdout);
       console.log('Program stderr:', stderr);
       if (code != 0) {
-        return res.send('terraform init -upgrade unsuccess');
+        return res.send('terraform plan -upgrade unsuccess');
+      } else if (code == 0) {
+        return res.send(stdout);
+      }
+    });
+  }
+});
+
+// Terraform apply
+app.get('/api/apply', function(req, res) {
+  //console.log(req);
+  if (!req.body.command) {
+    return res.status(400).send({
+      success: 'false',
+      message: 'command is required'
+    });
+  } else {
+    // create template
+    // shell.exec('cd ~/');
+    // shell.exec('touch ~/template.tf');
+
+    shell.exec('cd /tmp; terraform apply -no-color -auto-approve > file.txt;', function(
+      code,
+      stdout,
+      stderr
+    ) {
+      console.log('Exit code:', code);
+      // console.log('Program output:', stdout);
+      console.log('Program stderr:', stderr);
+      if (code != 0) {
+        return res.send('terraform apply unsuccess');
+      } else if (code == 0) {
+        return res.send(stdout);
+      }
+    });
+  }
+});
+
+// Terraform destroy
+
+app.get('/api/destroy', function(req, res) {
+  //console.log(req);
+  if (!req.body.command) {
+    return res.status(400).send({
+      success: 'false',
+      message: 'command is required'
+    });
+  } else {
+    // create template
+    // shell.exec('cd ~/');
+    // shell.exec('touch ~/template.tf');
+
+    shell.exec('cd /tmp; terraform delete -no-color -auto-approve > file.txt;', function(
+      code,
+      stdout,
+      stderr
+    ) {
+      console.log('Exit code:', code);
+      // console.log('Program output:', stdout);
+      console.log('Program stderr:', stderr);
+      if (code != 0) {
+        return res.send('terraform delete unsuccess');
       } else if (code == 0) {
         return res.send(stdout);
       }

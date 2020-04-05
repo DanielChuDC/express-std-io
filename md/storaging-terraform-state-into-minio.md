@@ -14,7 +14,6 @@ Remote state is a feature of backends. Configuring and using remote backends is 
 
 [Official terraform backend storage support S3 page](https://www.terraform.io/docs/backends/types/s3.html)
 
-[Solution of other S3 storage from github issue](https://github.com/hashicorp/terraform/pull/15553#issuecomment-334724247)
 https://github.com/hashicorp/terraform/pull/14096
 
 @radeksimko would be sweet to have this merged.
@@ -47,6 +46,8 @@ resource "local_file" "foo" {
     filename = "${path.module}/foo.bar"
 }
 ```
+
+[Solution of other S3 storage from github issue](https://github.com/hashicorp/terraform/pull/15553#issuecomment-334724247)
 
 @lfarnell I have used IBM Cloud Object Storage https://www.ibm.com/cloud-computing/bluemix/cloud-object-storage, it works well with the following configuration:
 

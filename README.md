@@ -14,6 +14,7 @@ npm install --save-dev dotenv //for fetching environment var
 npm install mongodb --save // for mongodb client
 npm install minio --save // for minio client
 npm install redis --save // for redis client
+npm install uuid --save // for uuid
 
 npm install agenda --save//for node light weight job scheduler
 
